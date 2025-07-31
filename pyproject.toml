@@ -1,0 +1,26 @@
+[project]
+name = "hasansezertasan"
+version = "0.1.0"
+description = "Python Ankara Topluluğu Workshop'u için hazırlanmıştır."
+readme = "README.md"
+authors = [
+    { name = "Hasan Sezer Taşan", email = "hasansezertasan@gmail.com" }
+]
+requires-python = ">=3.8"
+dependencies = []
+
+
+[project.scripts]
+hasansezertasan = "hasansezertasan.main:main"
+
+
+[build-system]
+requires = ["uv_build>=0.8.3,<0.9.0"]
+build-backend = "uv_build"
+
+
+[[tool.uv.index]]
+name = "testpypi"
+url = "https://test.pypi.org/simple/"
+publish-url = "https://test.pypi.org/legacy/"
+explicit = true

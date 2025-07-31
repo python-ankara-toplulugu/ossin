@@ -1,0 +1,34 @@
+---
+name: Publish
+on:
+  release:
+    types: [published]
+jobs:
+  publish-pypi:
+    runs-on: ubuntu-latest
+    name: Publish on Test PyPI
+    permissions:
+      id-token: write  # IMPORTANT: Mandatory for Trusted Publishing (gh-action-pypi-publish)
+    # Specifying a GitHub environment is optional, but strongly encouraged
+    environment:
+      name: testpypi
+      url: https://pypi.org/project/hasansezertasan/${{ github.ref_name }}
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version-file: '.python-version'
+      - name: Setup uv
+        id: setup-uv
+        uses: astral-sh/setup-uv@v6
+        with:
+          enable-cache: true
+      - name: Restore cache
+        if: steps.setup-uv.outputs.cache-hit == 'true'
+        run: echo "Cache was restored"
+      - name: Build the Package
+        run: uv build --no-sources --quiet
+      - name: Publish to PyPI
+        run: uv publish --index testpypi --quite --trusted-publishing always
