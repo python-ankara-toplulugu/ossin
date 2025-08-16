@@ -152,7 +152,7 @@ def display_system_info(
         columns = Columns(panels, equal=True, expand=True)
         console.print(columns)
     elif format_type == OutputFormat.JSON:
-        console.print_json(data=system_info, ensure_ascii=True)
+        console.print_json(data=system_info)
 
 
 @app.command()
@@ -200,7 +200,7 @@ def main(
         system_info = get_system_info()
 
         # Display header
-        console.print("\n[bold blue]🖥️  System Information Tool[/bold blue]\n")
+        console.print("\n[bold blue]System Information Tool[/bold blue]\n")
 
         # Display system information in requested format
         display_system_info(console, system_info, _format)
