@@ -17,16 +17,8 @@ What is OS's sin? 🤔 A beautiful system information utility that displays basi
 
 ## Installation
 
-### Using uv (recommended)
-
 ```sh
 uv add ossin
-```
-
-### Using pip
-
-```sh
-pip install ossin
 ```
 
 ## Usage
@@ -99,26 +91,55 @@ ossin --help
 - **Modern CLI**: Built with Typer for excellent CLI experience with type hints and auto-completion
 - **Cross-platform**: Works on Windows, macOS, and Linux
 
+<!-- xc-heading -->
 ## Development
 
-### Setup
+Clone the repository and cd into the project directory:
 
-Clone the repository and install dependencies using uv:
+```sh
+git clone https://github.com/python-ankara-toplulugu/ossin
+cd ossin
+```
+
+The commands below can also be executed using the [xc task runner](https://xcfile.dev/), which combines the usage instructions with the actual commands. Simply run `xc`, it will pop up an interactive menu with all available tasks.
+
+### `install`
+
+Install the dependencies:
 
 ```sh
 uv sync
 ```
 
-### Running the CLI
+### `start`
+
+Start the CLI:
 
 ```sh
 uv run ossin
 ```
 
-### Running tests
+### `test`
+
+Run the tests:
 
 ```sh
 uv run pytest
+```
+
+### `ci`
+
+Run the linters and type checkers:
+
+```sh
+uv run ruff check
+uv run ruff format
+uv run mypy
+uv run ty check
+uv run pyrefly check
+uv run pyright
+uv run vulture
+uv run validate-pyproject pyproject.toml
 ```
 
 ## License

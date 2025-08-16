@@ -1,6 +1,5 @@
-# SPDX-FileCopyrightText: 2025-present Hasan Sezer Taşan <hasansezertasan@gmail.com>
-#
-# SPDX-License-Identifier: MIT
+# Copyright (c) 2025 Hasan Sezer Taşan <hasansezertasan@gmail.com>
+# Licensed under the MIT License
 
 """
 Core module for the ossin package.
@@ -10,15 +9,35 @@ This module provides system information utilities and core functionality.
 
 import platform
 import sys
-from typing import Any, Dict
+from typing import TypedDict
 
 
-def get_system_info() -> Dict[str, Any]:
+class SystemInfo(TypedDict):
+    """A dictionary containing system information.
+
+    Attributes:
+        os_name: The name of the operating system.
+        os_version: The version of the operating system.
+        os_arch: The architecture of the operating system.
+        python_version: The version of Python.
+        python_implementation: The implementation of Python.
+        platform: The platform of the operating system.
+    """
+
+    os_name: str
+    os_version: str
+    os_arch: str
+    python_version: str
+    python_implementation: str
+    platform: str
+
+
+def get_system_info() -> SystemInfo:
     """
     Get system information.
 
     Returns:
-        Dict[str, Any]: A dictionary containing system information.
+        SystemInfo: A dictionary containing system information.
 
     Example:
         >>> info = get_system_info()

@@ -1,3 +1,6 @@
+# Copyright (c) 2025 Hasan Sezer Taşan <hasansezertasan@gmail.com>
+# Licensed under the MIT License
+
 """
 CLI module for the ossin package.
 
@@ -6,19 +9,19 @@ using Rich for beautiful terminal output and Typer for modern CLI experience.
 """
 
 from enum import Enum
-from typing import Any, Dict, List
+from importlib.metadata import version
+from typing import List
 
 import typer
-from rich.console import Console
-from rich.table import Table
-from rich.panel import Panel
-from rich.text import Text
-from rich.columns import Columns
 from rich import box
+from rich.columns import Columns
+from rich.console import Console
+from rich.panel import Panel
+from rich.table import Table
+from rich.text import Text
 
-from ossin.core import get_system_info
+from ossin.core import SystemInfo, get_system_info
 
-# Create Typer app
 app = typer.Typer(
     name="ossin",
     help="What is OS's sin? 🤔",
@@ -35,7 +38,7 @@ class OutputFormat(str, Enum):
     JSON = "json"
 
 
-def create_system_table(system_info: Dict[str, Any]) -> Table:
+def create_system_table(system_info: SystemInfo) -> Table:
     """
     Create a Rich table with system information.
 
@@ -57,7 +60,8 @@ def create_system_table(system_info: Dict[str, Any]) -> Table:
 
     # Add system information to table
     table.add_row(
-        "Operating System", f"{system_info['os_name']} {system_info['os_version']}"
+        "Operating System",
+        f"{system_info['os_name']} {system_info['os_version']}",
     )
     table.add_row("Architecture", system_info["os_arch"])
     table.add_row("Platform", system_info["platform"])
@@ -67,7 +71,7 @@ def create_system_table(system_info: Dict[str, Any]) -> Table:
     return table
 
 
-def create_info_panels(system_info: Dict[str, Any]) -> List[Panel]:
+def create_info_panels(system_info: SystemInfo) -> List[Panel]:
     """
     Create information panels for different system aspects.
 
@@ -96,10 +100,12 @@ def create_info_panels(system_info: Dict[str, Any]) -> List[Panel]:
     # Python Information Panel
     python_text = Text()
     python_text.append(
-        f"Version: {system_info['python_version'].split()[0]}\n", style="bold cyan"
+        f"Version: {system_info['python_version'].split()[0]}\n",
+        style="bold cyan",
     )
     python_text.append(
-        f"Implementation: {system_info['python_implementation']}", style="green"
+        f"Implementation: {system_info['python_implementation']}",
+        style="green",
     )
 
     python_panel = Panel(
@@ -127,7 +133,7 @@ def create_info_panels(system_info: Dict[str, Any]) -> List[Panel]:
 
 def display_system_info(
     console: Console,
-    system_info: Dict[str, Any],
+    system_info: SystemInfo,
     format_type: OutputFormat = OutputFormat.TABLE,
 ) -> None:
     """
@@ -151,7 +157,7 @@ def display_system_info(
 
 @app.command()
 def main(
-    format: OutputFormat = typer.Option(
+    _format: OutputFormat = typer.Option(
         OutputFormat.TABLE,
         "--format",
         "-f",
@@ -177,13 +183,14 @@ def main(
         ossin --format panels    # Display system info in panel format
         ossin --format json      # Display system info in JSON format
         ossin --no-color         # Display without colors
+
+    Raises:
+        typer.Exit: If the version flag is provided.
     """
     # Handle version flag
     if _version:
-        from importlib.metadata import version
-
         typer.echo(version("ossin"))
-        raise typer.Exit()
+        raise typer.Exit
 
     # Create console with appropriate settings
     console = Console(color_system="auto" if not no_color else None)
@@ -196,17 +203,13 @@ def main(
         console.print("\n[bold blue]🖥️  System Information Tool[/bold blue]\n")
 
         # Display system information in requested format
-        display_system_info(console, system_info, format)
+        display_system_info(console, system_info, _format)
 
         console.print("\n[dim]✨ Powered by ossin[/dim]\n")
 
     except Exception as e:
         console.print(f"[bold red]Error:[/bold red] {e}")
         console.print(
-            "[dim]Please check if all required dependencies are installed.[/dim]"
+            "[dim]Please check if all required dependencies are installed.[/dim]",
         )
-        raise typer.Exit(1)
-
-
-if __name__ == "__main__":
-    app()
+        raise typer.Exit(1) from e
