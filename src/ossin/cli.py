@@ -205,7 +205,7 @@ def main(
         # Display system information in requested format
         display_system_info(console, system_info, _format)
 
-        console.print("\n[dim]✨ Powered by ossin[/dim]\n")
+        console.print("\n[dim] Powered by ossin[/dim]\n")
 
     except Exception as e:
         console.print(f"[bold red]Error:[/bold red] {e}")
