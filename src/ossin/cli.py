@@ -152,7 +152,7 @@ def display_system_info(
         columns = Columns(panels, equal=True, expand=True)
         console.print(columns)
     elif format_type == OutputFormat.JSON:
-        console.print_json(data=system_info)
+        console.print_json(data=system_info, ensure_ascii=True)
 
 
 @app.command()
