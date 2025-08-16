@@ -1,0 +1,72 @@
+---
+name: CI
+on:
+  workflow_dispatch:
+  push:
+    branches: [main, master]
+  pull_request:
+    branches: [main, master]
+jobs:
+  ci:
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [windows-latest, ubuntu-latest, macos-latest]
+    runs-on: ${{ matrix.os }}
+    name: Run ossin on ${{ matrix.os }}
+    timeout-minutes: 5
+    steps:
+      - name: System Info
+        shell: bash
+        run: |
+          if [[ ${{ matrix.os }} == "ubuntu-latest" ]]; then
+              echo "The system is Linux."
+              uname -a || true
+              lsb_release -a || true
+              gcc --version || true
+          elif [[ ${{ matrix.os }} == "macos-latest" ]]; then
+              echo "The system is macOS."
+              sw_vers || true
+              uname -a || true
+              gcc --version || true
+          elif [[ ${{ matrix.os }} == "windows-latest" ]]; then
+              echo "The system is Windows (using a Unix-like environment)."
+              systeminfo || true
+          else
+              echo "Unknown OS: $OS_TYPE"
+              exit 1
+          fi
+      - name: Environment Info
+        run: |
+          env || true
+      - name: Checkout repository
+        uses: actions/checkout@v5
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version-file: '.python-version'
+      - name: Setup uv
+        id: setup-uv
+        uses: astral-sh/setup-uv@v5
+        with:
+          enable-cache: true
+      - name: Restore cache
+        if: steps.setup-uv.outputs.cache-hit == 'true'
+        run: echo "Cache was restored"
+      - name: Run CI
+        if: ${{ matrix.os == 'ubuntu-latest' }}
+        run: |
+          uv run ruff check
+          uv run ruff format
+          uv run mypy
+          uv run ty check
+          uv run pyrefly check
+          uv run pyright
+          uv run vulture
+          uv run validate-pyproject pyproject.toml
+      - name: Run ossin
+        run: |
+          uv run ossin --version
+          uv run ossin --no-color --format json
+          uv run ossin --no-color --format panels
+          uv run ossin --no-color --format table

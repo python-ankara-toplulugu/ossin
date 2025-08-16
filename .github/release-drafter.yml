@@ -1,0 +1,12 @@
+---
+# yaml-language-server: $schema=https://raw.githubusercontent.com/release-drafter/release-drafter/refs/heads/master/schema.json
+# Configuration for Release Drafter: https://github.com/release-drafter/release-drafter
+name-template: '$RESOLVED_VERSION 🌈'
+tag-template: '$RESOLVED_VERSION'
+template: |
+  ## What's Changed
+
+  $CHANGES
+exclude-labels:
+  - 'skip-changelog'
+  - 'invalid'
