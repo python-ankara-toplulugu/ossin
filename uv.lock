@@ -225,6 +225,9 @@ wheels = [
 [[package]]
 name = "ossin"
 source = { editable = "." }
+dependencies = [
+    { name = "typer" },
+]
 
 [package.optional-dependencies]
 cli = [
@@ -245,7 +248,10 @@ dev = [
 ]
 
 [package.metadata]
-requires-dist = [{ name = "typer", marker = "extra == 'cli'" }]
+requires-dist = [
+    { name = "typer", specifier = ">=0.16.0" },
+    { name = "typer", marker = "extra == 'cli'" },
+]
 provides-extras = ["cli"]
 
 [package.metadata.requires-dev]

@@ -46,7 +46,9 @@ classifiers = [
   "Typing :: Typed",
 ]
 requires-python = ">=3.8"
-dependencies = []
+dependencies = [
+    "typer>=0.16.0",
+]
 
 
 [project.optional-dependencies]
